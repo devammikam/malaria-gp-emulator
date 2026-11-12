@@ -1,0 +1,27 @@
+{
+  "status": "native_input_demonstrator_not_full_research",
+  "source_sha256": "5fb5a957d796aeba16260ba50a174e8358db0c35dd9e89437980f40bbe597b28",
+  "input_native_rows": 18,
+  "configurations": 9,
+  "group_holdout": "complete EIR levels, not random seeds",
+  "prediction_mae_demonstration": 0.19222034060017196,
+  "checked_fraction": 0.0,
+  "gp_optimisations_converged": [
+    true,
+    true,
+    true
+  ],
+  "checks": {
+    "gp_training_sanity": true,
+    "two_seed_abstention": true,
+    "deliberately_wrong_choice_rejected": true
+  },
+  "not_implemented_research_steps": [
+    "Full simulation design and independent high-replication reference",
+    "Native adaptive acquisition and budget-matched repeated experiments",
+    "Population and burn-in convergence study",
+    "Empirical calibration of emulator uncertainty and risk-coverage-cost inference",
+    "Optional native malariasimple fidelity and StateMINT benchmark"
+  ],
+  "limitations": "Small native grid, uncalibrated settings and uncertain reference means; no country recommendation"
+}

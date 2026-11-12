@@ -1,0 +1,20 @@
+{
+  "python": "3.12.14 (main, Aug 25 2026, 14:01:42) [MSC v.1944 64 bit (AMD64)]",
+  "platform": "Windows-11-10.0.26200-SP0",
+  "architecture": "AMD64",
+  "processor": "Intel64 Family 6 Model 189 Stepping 1, GenuineIntel",
+  "packages": {
+    "numpy": "2.3.5",
+    "pandas": "3.0.1",
+    "scipy": "1.18.1",
+    "matplotlib": "3.11.2"
+  },
+  "imperial_model": {
+    "package": "malariasimulation",
+    "version": "3.0.0",
+    "R": "4.6.1",
+    "source_commit": "5f63ccd61c8e893892fd12e7580fc22a7c882285",
+    "repository": "https://github.com/mrc-ide/malariasimulation",
+    "status": "Uncalibrated native implementation experiments, not completed research"
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "project": "ammikam",
+  "script": "ammikam_code.py",
+  "arguments": [
+    "--input",
+    "native_reference/integration_summary.csv",
+    "--out",
+    "results"
+  ],
+  "figure": "results/companion_figure.png",
+  "scope": "The uncalibrated native reference has nine configurations and two seeds per configuration. Complete EIR levels are held out for the emulator example. Conservative direct-simulator bounds leave every demonstrated decision unresolved, which is valid abstention at this sample size. Adequate native replication, adaptive design, calibrated policy scenarios and external validation remain research work."
+}
