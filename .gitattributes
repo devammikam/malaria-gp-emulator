@@ -1,0 +1,10 @@
+# Manifests are hashed (manifests/*.json, version records): keep their bytes exact.
+manifests/** -text
+
+# Code and docs: LF in the repository and working copy.
+*.py text eol=lf
+*.R text eol=lf
+*.md text eol=lf
+*.json text eol=lf
+.gitignore text eol=lf
+.gitattributes text eol=lf

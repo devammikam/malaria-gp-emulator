@@ -17,6 +17,9 @@ milestone it serves. Status: 📝 planned · 🟨 in progress · ✅ done · ❌
 | I6 | **`docs/SCHEMA.md`**: column definitions for the manifest and run summary, including the exact prevalence numerator and denominator | Dossier outcome contract (A1) | ✅ |
 | I7 | `.gitignore` adds `runs/` | D6 | ✅ |
 
+| I8 | **`.gitattributes`**: store `manifests/` byte-for-byte (`-text`) and use LF endings for code | With Windows `autocrlf`, a checkout could rewrite `pilot.csv` with CRLF endings, so its sha256 would stop matching `pilot.json` and the version records | ✅ |
+| I9 | **Repo-local git sign-in**: this repo fetches the `devammikam` token from the GitHub CLI when pushing (`gh auth token -u devammikam`). The global active account (`Ammikam`) is unchanged. | Pushes failed after the CLI's active account changed to a different GitHub user | ✅ |
+
 **Design details settled while writing M1 code**
 - EIR partitions are interleaved on the log scale: train = 16 points at fractions i/15
   (including 5 and 50, so the audit never extrapolates), tune = 6 at (2j+1)/12, audit =
