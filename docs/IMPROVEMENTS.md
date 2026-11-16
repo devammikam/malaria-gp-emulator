@@ -20,6 +20,15 @@ milestone it serves. Status: 📝 planned · 🟨 in progress · ✅ done · ❌
 | I8 | **`.gitattributes`**: store `manifests/` byte-for-byte (`-text`) and use LF endings for code | With Windows `autocrlf`, a checkout could rewrite `pilot.csv` with CRLF endings, so its sha256 would stop matching `pilot.json` and the version records | ✅ |
 | I9 | **Repo-local git sign-in**: this repo fetches the `devammikam` token from the GitHub CLI when pushing (`gh auth token -u devammikam`). The global active account (`Ammikam`) is unchanged. | Pushes failed after the CLI's active account changed to a different GitHub user | ✅ |
 
+
+
+## M2 — Pilot (Week 2)
+
+| ID | Improvement | Why | Status |
+|---|---|---|---|
+| I10 | **`scripts/run_pilot.ps1`**: starts 6 `native_runner.R` shards in parallel with one log each, keeps Windows awake until all finish (`SetThreadExecutionState`), and writes `DONE.txt` with each shard's exit code. Outputs go to `%USERPROFILE%\malaria-runs\pilot` (D7). | One command for long batches. A sleeping laptop would pause the runs. | ✅ tested: 2 runs on 2 shards, exit codes 0, run 1 reproduced exactly |
+| I11 | **Scheduled task** `malaria-pilot`: runs `run_pilot.ps1` once on Tue 17 Nov 2026 at 21:00 (wakes the PC, allowed on battery, starts late if missed, 14 h limit) | The user chose this start time | ✅ registered, next run 17 Nov 21:00 |
+
 **Design details settled while writing M1 code**
 - EIR partitions are interleaved on the log scale: train = 16 points at fractions i/15
   (including 5 and 50, so the audit never extrapolates), tune = 6 at (2j+1)/12, audit =

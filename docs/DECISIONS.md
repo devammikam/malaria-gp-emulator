@@ -96,6 +96,16 @@ follow-up.
 
 ---
 
+## D7 — Run outputs live outside OneDrive
+*16 Nov 2026 · Status: adopted*
+
+The repository sits in a OneDrive folder. OneDrive would sync every daily file as it is
+written and can lock files mid-write. Run outputs therefore go to
+`%USERPROFILE%\malaria-runs\<name>`. Only the run summaries are copied into the repo
+(`results/pilot/`) for analysis and version control. Refines D6.
+
+---
+
 ## D6 — Storage: summaries in git, daily outputs compressed outside git
 *16 Nov 2026 · Status: adopted*
 
