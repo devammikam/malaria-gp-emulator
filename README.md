@@ -10,7 +10,23 @@ bed-net coverage, and audits the bed-net coverage decisions it would make.
 > simulator-based check rejects (abstains on) every decision, which is the correct
 > result at this sample size. See [What is not done yet](#what-is-not-done-yet).
 
-## What it does
+## Project documents
+
+- [docs/PLAN.md](docs/PLAN.md): the 12-week milestone plan and its current status
+- [docs/DECISIONS.md](docs/DECISIONS.md): design decisions and the reasoning behind them
+- [docs/IMPROVEMENTS.md](docs/IMPROVEMENTS.md): every code change, logged before it is written
+- [docs/SCHEMA.md](docs/SCHEMA.md): column definitions for manifests and run outputs
+
+## Research pipeline (in progress)
+
+```bash
+python design.py pilot --out manifests                    # list every pilot run
+Rscript tests/test_reproducible.R                         # seed and scenario checks
+Rscript native_runner.R --manifest manifests/pilot.csv --out runs/pilot --shard 1 --of 4
+python -m pytest tests                                    # design tests
+```
+
+## What it does (demonstration)
 
 1. **Summarises simulator output.** It averages the seeds for each (EIR, net coverage)
    setting.

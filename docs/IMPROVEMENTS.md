@@ -1,0 +1,39 @@
+# Improvements log
+
+Every code change is listed here **before** it is written, with its reason and the
+milestone it serves. Status: 📝 planned · 🟨 in progress · ✅ done · ❌ dropped.
+
+---
+
+## M1 — Model identity and design (Week 1)
+
+| ID | Improvement | Why | Status |
+|---|---|---|---|
+| I1 | **`design.py`**: generates a scenario manifest (`run_id, partition, context, eir, net, rep, seed, population, burn_days, horizon_days`) for the pilot, train, tune and audit partitions | One archived, deterministic source of truth for every run. Fixes seed reuse (D4). | ✅ |
+| I2 | **`tests/test_design.py`**: seeds disjoint across partitions and contexts, shared across options, identical on regeneration. Training and audit EIRs don't overlap. EIR inside 5–50. | Catches design mistakes before CPU-hours are spent | ✅ 9/9 pass |
+| I3 | **`native_runner.R`** + **`R/scenario.R`**: reads the manifest. Fixed net scenario (D5). `--shard/--of` parallelism and resume (D3). Gzipped daily output (D6). One parameter archive per scenario. Records CPU and elapsed time. Checks the prevalence denominator is positive. | Research-grade runner. `imperial_experiments.R` stays unchanged as provenance for the demonstration data. | ✅ smoke run + resume verified |
+| I4 | **Version record**: the runner writes `version_record_shardNN.json` (R version, malariasimulation version and source SHA, git commit and dirty flag, manifest hash) plus `sessionInfo` | Dossier: "preserve package versions, source revision… seed lists" | ✅ manifest hash matches Python's |
+| I5 | **Reproducibility test**: `tests/test_reproducible.R` runs one small scenario twice with the same seed and checks identical output, then once with a different seed and checks it differs. Also checks the D5 net schedule reaches the parameter object. | Confirms `set.seed` fully controls the C++ RNG (`model.R:114`) | ✅ 9/9 pass |
+| I6 | **`docs/SCHEMA.md`**: column definitions for the manifest and run summary, including the exact prevalence numerator and denominator | Dossier outcome contract (A1) | ✅ |
+| I7 | `.gitignore` adds `runs/` | D6 | ✅ |
+
+**Design details settled while writing M1 code**
+- EIR partitions are interleaved on the log scale: train = 16 points at fractions i/15
+  (including 5 and 50, so the audit never extrapolates), tune = 6 at (2j+1)/12, audit =
+  12 at (2k+1)/24. These fractions can never coincide, so the sets are disjoint.
+- Pilot = EIR {5, 15.8, 50} × 3 nets × population {500, 5000, 10000} × burn-in
+  {730, 1460} × 10 replicates = 540 runs. Population and burn-in variants reuse seeds,
+  so their effects are compared on paired runs.
+- `design.py` estimates CPU-hours from the demonstration's runtime (8.1 s per run at 500
+  people over 2,555 days), assuming cost scales with people × days. M2 checks this.
+
+## M1 verification results (16 Nov 2026)
+- `pytest tests`: 9 passed. `Rscript tests/test_reproducible.R`: 9 passed.
+- `manifests/pilot.csv`: 540 runs, sha256 `a6cdd594…ad34b3`, committed.
+- Smoke run (`pilot-c00-n0.3-p500-b730-r01`): prevalence 0.168, rerun correctly skipped.
+  Under the old scenario the comparable demonstration value was 0.205. The difference
+  fits D5: the 0.5 baseline and repeated campaigns keep more nets in use.
+- **Runtime:** the smoke run took 14.0 s, where the demonstration averaged 8.1 s.
+  `design.py`'s estimate (14.4 CPU-h for the pilot) is probably about 1.7× too low, so
+  plan for about 25 CPU-h. The machine has 8 logical cores, so the pilot takes about
+  4–5 h on 6 shards. M2 will refit the runtime model from pilot timings.
