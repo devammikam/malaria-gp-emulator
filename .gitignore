@@ -16,6 +16,9 @@ R_install_session.txt
 # Personal runs (the reference run in results/ is kept)
 results/*/
 
+# Native simulator outputs (archived separately, see docs/DECISIONS.md D6)
+runs/
+
 # Downloaded public inputs (fetch_public_inputs.py)
 work/
 

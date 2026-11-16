@@ -1,0 +1,17 @@
+{
+  "manifest": "pilot.csv",
+  "runs": 540,
+  "sha256": "a6cdd594352d5e1e7b5c5290aaa1569a40a8316a2462df3ebaffb98c2ead34b3",
+  "estimated_cpu_hours": 14.4,
+  "runs_by_partition": {
+    "pilot": 540
+  },
+  "seed_plan": "seed = base[partition] + 1000*context + rep; shared across net options (D4)",
+  "bases": {
+    "pilot": 1000000,
+    "train": 2000000,
+    "tune": 3000000,
+    "audit": 4000000,
+    "adaptive": 5000000
+  }
+}
