@@ -148,6 +148,9 @@ def figure(data, sds, candidates, chosen, path):
     ax.plot(pops, ref, "--", color=muted, lw=1, label="1/√population")
     ax.set(xscale="log", yscale="log", xlabel="Simulated population",
            ylabel="Largest between-seed SD", title=f"A. Noise vs population (burn-in {burn} d)")
+    ticks = [.003, .005, .01, .02, .03, .05]
+    ax.set_yticks(ticks, [f"{t:g}" for t in ticks])
+    ax.minorticks_off()
     ax.legend(frameon=False, fontsize=8)
 
     ax = axs[1]
@@ -165,7 +168,7 @@ def figure(data, sds, candidates, chosen, path):
     ax.set(xlabel="Net coverage (grouped by EIR)",
            ylabel=f"Prevalence: {long_} d − {short} d burn-in",
            title=f"B. Burn-in effect (population {chosen['population']})")
-    ax.legend(frameon=False, fontsize=8)
+    ax.legend(frameon=False, fontsize=8, loc="upper right", ncol=2)
 
     ax = axs[2]
     d = sds[(sds.population == chosen["population"]) & (sds.burn_days == burn)]
