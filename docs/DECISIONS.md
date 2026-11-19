@@ -132,6 +132,14 @@ consistent at every population) can't be read as a pure burn-in effect.
 reached the ±0.0025 target within budget). The D8.1 burn-in outcome (1460) is
 superseded by this follow-up.
 
+**Outcome (19 Nov 2026): burn-in locked at 3285 days.** All 180 runs finished (6 shards,
+exit code 0, 1.4 h wall). Every paired difference (3285 − 2190) was small, between
+−0.0011 and +0.0019, and 7 of 9 CIs lay inside ±0.005. Two CIs at EIR 50 crossed it
+(upper ends 0.0063 at net 0.3 and 0.7), so the rule as written selects 3285. The failure
+comes from imprecision with 10 seeds, not from a detected bias. 3285 costs about 55
+CPU-hours for the full study, inside the 100-hour budget. Normality: 0 of 9 cells with
+p < 0.01 (min p = 0.15), so D1 stands. Details: `results/pilot_burnin/`.
+
 ---
 
 ## D8 — Pilot decision rules (written before the pilot results were analysed)

@@ -3,7 +3,7 @@
 Usage:
     python design.py pilot --out manifests
     python design.py pilot-burnin --out manifests
-    python design.py research --population 10000 --burn 2190 --out manifests
+    python design.py research --population 10000 --burn 3285 --out manifests
 
 The manifest lists every simulator run, with one row per run. The R runner
 (native_runner.R) reads it, so the manifest is the single archived record of
@@ -138,7 +138,7 @@ def main():
     parser.add_argument("kind", choices=["pilot", "pilot-burnin", "research"])
     parser.add_argument("--out", type=Path, default=Path("manifests"))
     parser.add_argument("--population", type=int, default=10000)
-    parser.add_argument("--burn", type=int, default=2190)
+    parser.add_argument("--burn", type=int, default=3285)
     parser.add_argument("--reps", type=int, default=10, help="pilot replicates")
     args = parser.parse_args()
     if args.kind == "pilot":

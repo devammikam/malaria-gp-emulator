@@ -1,0 +1,148 @@
+{
+  "runs": 180,
+  "rules": "docs/DECISIONS.md D8",
+  "runtime_model": {
+    "intercept_s": 8.200814814814706,
+    "s_per_person_day": 2.9619279553526137e-06,
+    "r2": 0.6952355660920939
+  },
+  "batch_record": [
+    "Started  11/19/2026 14:14:43",
+    "Finished 11/19/2026 15:38:31",
+    "Elapsed  1.4 h",
+    "Exit codes by shard: 0, 0, 0, 0, 0, 0"
+  ],
+  "candidates": [
+    {
+      "population": 10000,
+      "shorter_burn_adequate": false,
+      "burn_days": 3285,
+      "max_sd": 0.006092169658059085,
+      "mean_sd": 0.004239827236091536,
+      "audit_halfwidth": 0.005094117910573821,
+      "audit_halfwidth_at_mean_sd": 0.00354523611018305,
+      "projected_cpu_hours": 54.95794814814812,
+      "within_budget": 1.0,
+      "halfwidth_ok": false
+    }
+  ],
+  "burn_in_tables": {
+    "10000": [
+      {
+        "eir": 5.0,
+        "net": 0.3,
+        "mean_diff": 0.0004,
+        "ci_low": -0.00229,
+        "ci_high": 0.0031
+      },
+      {
+        "eir": 5.0,
+        "net": 0.5,
+        "mean_diff": 0.00173,
+        "ci_low": -3e-05,
+        "ci_high": 0.0035
+      },
+      {
+        "eir": 5.0,
+        "net": 0.7,
+        "mean_diff": 0.00039,
+        "ci_low": -0.00197,
+        "ci_high": 0.00274
+      },
+      {
+        "eir": 15.81139,
+        "net": 0.3,
+        "mean_diff": 0.00052,
+        "ci_low": -0.00286,
+        "ci_high": 0.00391
+      },
+      {
+        "eir": 15.81139,
+        "net": 0.5,
+        "mean_diff": -0.0011,
+        "ci_low": -0.00396,
+        "ci_high": 0.00176
+      },
+      {
+        "eir": 15.81139,
+        "net": 0.7,
+        "mean_diff": -0.00018,
+        "ci_low": -0.00443,
+        "ci_high": 0.00406
+      },
+      {
+        "eir": 50.0,
+        "net": 0.3,
+        "mean_diff": 0.00165,
+        "ci_low": -0.00295,
+        "ci_high": 0.00625
+      },
+      {
+        "eir": 50.0,
+        "net": 0.5,
+        "mean_diff": 0.00187,
+        "ci_low": -0.00149,
+        "ci_high": 0.00522
+      },
+      {
+        "eir": 50.0,
+        "net": 0.7,
+        "mean_diff": 0.00163,
+        "ci_low": -0.00308,
+        "ci_high": 0.00633
+      }
+    ]
+  },
+  "decision": {
+    "population": 10000,
+    "burn_days": 3285,
+    "rule_applied": "no population met the half-width target: largest within budget (D8.2 fallback)"
+  },
+  "normality": {
+    "cells": 9,
+    "cells_p_below_0.01": 0,
+    "d1_stands": true,
+    "min_p": 0.14830915411769063
+  },
+  "curvature": [
+    {
+      "eir": 5.0,
+      "curvature": 0.00215,
+      "se": 0.00173,
+      "ratio": 1.24654
+    },
+    {
+      "eir": 15.81139,
+      "curvature": 0.00524,
+      "se": 0.00211,
+      "ratio": 2.48683
+    },
+    {
+      "eir": 50.0,
+      "curvature": -0.00301,
+      "se": 0.00218,
+      "ratio": -1.38069
+    }
+  ],
+  "near_linear_in_coverage": false,
+  "common_random_numbers": [
+    {
+      "eir": 5.0,
+      "corr_0.3_0.7": 0.83078,
+      "sd_contrast_paired": 0.00257,
+      "sd_contrast_if_independent": 0.00507
+    },
+    {
+      "eir": 15.81139,
+      "corr_0.3_0.7": 0.70917,
+      "sd_contrast_paired": 0.0044,
+      "sd_contrast_if_independent": 0.00697
+    },
+    {
+      "eir": 50.0,
+      "corr_0.3_0.7": 0.78164,
+      "sd_contrast_paired": 0.00364,
+      "sd_contrast_if_independent": 0.00734
+    }
+  ]
+}
