@@ -27,6 +27,9 @@ milestone it serves. Status: 📝 planned · 🟨 in progress · ✅ done · ❌
 | ID | Improvement | Why | Status |
 |---|---|---|---|
 | I10 | **`scripts/run_pilot.ps1`**: starts 6 `native_runner.R` shards in parallel with one log each, keeps Windows awake until all finish (`SetThreadExecutionState`), and writes `DONE.txt` with each shard's exit code. Outputs go to `%USERPROFILE%\malaria-runs\pilot` (D7). | One command for long batches. A sleeping laptop would pause the runs. | ✅ tested: 2 runs on 2 shards, exit codes 0, run 1 reproduced exactly |
+| I12 | **`pilot_analysis.py`**: combines the shard summaries into `results/pilot/pilot_summary.csv`, applies the D8 rules, and writes `results/pilot/pilot_report.json` and `pilot_figure.png` (SD vs population, burn-in differences, coverage curves) | Makes the M2 decisions reproducible and traceable to data | 📝 |
+| I13 | **`design.py pilot-burnin`**: follow-up manifest (population 10,000, burn-in 2190 vs 3285, same seeds as the pilot). `research_manifest` rejects burn-ins that aren't multiples of 1095 (D9). Tests for both. | D9 | 📝 |
+| I14 | **`pilot_analysis.py`**: works for any pilot folder (`--runs`, `--out`), reads wall time from `DONE.txt`, and reports mean as well as max SD per population | Same rules applied to the follow-up. Max-of-9 SD with 10 seeds is noisy. | 📝 |
 | I11 | **Scheduled task** `malaria-pilot`: runs `run_pilot.ps1` once on Tue 17 Nov 2026 at 21:00 (wakes the PC, allowed on battery, starts late if missed, 14 h limit) | The user chose this start time | ✅ registered, next run 17 Nov 21:00 |
 
 **Design details settled while writing M1 code**

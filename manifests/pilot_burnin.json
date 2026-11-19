@@ -1,0 +1,17 @@
+{
+  "manifest": "pilot_burnin.csv",
+  "runs": 180,
+  "sha256": "be4c3cf25b07b2bf00ed155499f5a9392a58aeec80a0d1b7a2c281c6ee7621c1",
+  "estimated_cpu_hours": 14.5,
+  "runs_by_partition": {
+    "pilot": 180
+  },
+  "seed_plan": "seed = base[partition] + 1000*context + rep; shared across net options (D4)",
+  "bases": {
+    "pilot": 1000000,
+    "train": 2000000,
+    "tune": 3000000,
+    "audit": 4000000,
+    "adaptive": 5000000
+  }
+}

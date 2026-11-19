@@ -2,7 +2,8 @@
 
 Usage:
     python design.py pilot --out manifests
-    python design.py research --population 5000 --burn 730 --out manifests
+    python design.py pilot-burnin --out manifests
+    python design.py research --population 10000 --burn 2190 --out manifests
 
 The manifest lists every simulator run, with one row per run. The R runner
 (native_runner.R) reads it, so the manifest is the single archived record of
@@ -88,7 +89,22 @@ def pilot_manifest(reps=10):
     return pd.DataFrame(rows)
 
 
+CAMPAIGN_CYCLE = 1095  # days between net campaigns (D5)
+
+
+def pilot_burnin_manifest(population=10000, burns=(2190, 3285), reps=10):
+    """Follow-up burn-in pilot (D9): whole campaign cycles, same seeds as the pilot."""
+    if any(b % CAMPAIGN_CYCLE for b in burns):
+        raise ValueError("Burn-ins must be whole campaign cycles (D9)")
+    rows = []
+    for burn in burns:
+        rows += rows_for("pilot", log_grid([0, .5, 1]), reps, population, burn)
+    return pd.DataFrame(rows)
+
+
 def research_manifest(population, burn, reps=None):
+    if burn % CAMPAIGN_CYCLE:
+        raise ValueError(f"Burn-in {burn} is not a multiple of {CAMPAIGN_CYCLE} days (D9)")
     reps = reps or {"train": 4, "tune": 4, "audit": 20}
     rows = []
     for partition, eirs in partition_eirs().items():
@@ -119,14 +135,17 @@ def write(manifest, out, name):
 def main():
     parser = argparse.ArgumentParser(description=__doc__,
                                      formatter_class=argparse.RawDescriptionHelpFormatter)
-    parser.add_argument("kind", choices=["pilot", "research"])
+    parser.add_argument("kind", choices=["pilot", "pilot-burnin", "research"])
     parser.add_argument("--out", type=Path, default=Path("manifests"))
-    parser.add_argument("--population", type=int, default=5000)
-    parser.add_argument("--burn", type=int, default=730)
+    parser.add_argument("--population", type=int, default=10000)
+    parser.add_argument("--burn", type=int, default=2190)
     parser.add_argument("--reps", type=int, default=10, help="pilot replicates")
     args = parser.parse_args()
     if args.kind == "pilot":
         info = write(pilot_manifest(args.reps), args.out, "pilot")
+    elif args.kind == "pilot-burnin":
+        info = write(pilot_burnin_manifest(args.population, reps=args.reps), args.out,
+                     "pilot_burnin")
     else:
         info = write(research_manifest(args.population, args.burn), args.out,
                      f"research_p{args.population}_b{args.burn}")

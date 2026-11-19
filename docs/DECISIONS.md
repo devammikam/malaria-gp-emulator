@@ -96,6 +96,72 @@ follow-up.
 
 ---
 
+## D10 — Proposal for M3: regret check on paired contrasts
+*19 Nov 2026 · Status: proposed (decided at M3). Proposed **after** seeing the pilot,
+and labelled as such.*
+
+The current check, `checked_regret`, combines each option's own interval
+(worst case of the chosen option minus best case of the alternatives). This ignores that
+options share seeds (D4), so it counts seed-to-seed noise twice. A check on the paired
+difference (chosen − alternative, per seed) uses the noise that matters for the
+decision. In the pilot, paired contrasts had 35–40% lower SD than unpaired ones. Both
+checks will be implemented in M4. Which one is primary is fixed at M3, before any audit
+data exist. The justification is the purpose of D4, not the pilot numbers.
+
+---
+
+## D9 — Burn-in lengths are whole 3-year campaign cycles; follow-up burn-in pilot
+*19 Nov 2026 · Status: adopted*
+
+**Finding.** Under D5, campaigns run every 1095 days from day 1. A 730-day burn-in puts
+the last baseline campaign 730 days before follow-up. A 1460-day burn-in adds one on
+day 1096, only 365 days before follow-up. The D8.1 comparison therefore mixed
+equilibration with **fresher nets at follow-up start**. Its result (1460 − 730 ≈ −0.015,
+consistent at every population) can't be read as a pure burn-in effect.
+
+**Decision.**
+- Research burn-ins must be multiples of 1095 days. Then baseline campaigns run on an
+  unbroken 3-year cadence straight into the option campaign at `burn+1`, and the net
+  history at follow-up start is identical across burn-in lengths. `design.py` enforces this.
+- Follow-up pilot at population 10,000 (D8.2's choice): burn-in 2190 vs 3285 days
+  (6 vs 9 years), 3 EIR × 3 nets × 10 reps = 180 runs, same seeds as the pilot. D8.1's
+  rule applies unchanged: 2190 is adequate if every paired-difference CI lies within
+  ±0.005. Otherwise use 3285.
+
+**Status of D8 outcomes.** Population 10,000 stands (D8.2 fallback: no population
+reached the ±0.0025 target within budget). The D8.1 burn-in outcome (1460) is
+superseded by this follow-up.
+
+---
+
+## D8 — Pilot decision rules (written before the pilot results were analysed)
+*19 Nov 2026 · Status: adopted. The 540 pilot runs finished on 18 Nov; their
+summaries had not been opened when these rules were written.*
+
+δ = 0.01 throughout.
+
+1. **Burn-in.** 730 days is adequate if, at the chosen population and for every
+   EIR × net cell, the 95% CI of the paired difference (1460 − 730 days, same seeds)
+   lies inside ±δ/2 = ±0.005. Otherwise use 1460 days.
+2. **Population.** Choose the smallest population that meets both conditions:
+   (a) the projected full research study fits in 100 CPU-hours, with the chosen
+   burn-in and the runtime model refitted from pilot timings; and (b) the audit
+   t-interval half-width is ≤ δ/4 = 0.0025. That half-width uses 20 seeds,
+   Bonferroni over 12 × 3 = 36 cells and the largest pilot SD at that population.
+   If no population meets (b), take the largest within budget and record that more
+   abstention is expected.
+3. **Normality (confirms D1).** D1 stands unless Shapiro–Wilk p < 0.01 in more than half
+   of the cells at the chosen population. With 10 replicates this test has low power, so
+   the M6 audit (20 seeds) rechecks it.
+4. **Curvature (reported, no decision).** Second difference p(0.3) − 2p(0.5) + p(0.7) at
+   each EIR, compared with its standard error. If |curvature| < 2 SE at every EIR,
+   the response is "near-linear in coverage" and the risk that adaptation won't help is
+   flagged.
+5. **Common random numbers (reported).** Correlation between options sharing a seed,
+   and how much it reduces the SD of option contrasts.
+
+---
+
 ## D7 — Run outputs live outside OneDrive
 *16 Nov 2026 · Status: adopted*
 

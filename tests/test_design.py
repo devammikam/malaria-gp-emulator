@@ -7,7 +7,7 @@ import design
 
 @pytest.fixture(scope="module")
 def research():
-    return design.research_manifest(population=5000, burn=730)
+    return design.research_manifest(population=10000, burn=2190)
 
 
 @pytest.fixture(scope="module")
@@ -55,8 +55,8 @@ def test_audit_inside_training_range(research):
 
 
 def test_manifest_is_deterministic():
-    a = design.research_manifest(5000, 730)
-    b = design.research_manifest(5000, 730)
+    a = design.research_manifest(10000, 2190)
+    b = design.research_manifest(10000, 2190)
     pd.testing.assert_frame_equal(a, b)
 
 
@@ -70,3 +70,19 @@ def test_seed_plan_rejects_overflow():
 def test_cpu_estimate_matches_demonstration():
     demo = pd.DataFrame({"population": [500], "burn_days": [730], "horizon_days": [1825]})
     assert design.estimated_cpu_hours(demo) * 3600 == pytest.approx(8.13)
+
+
+def test_research_burn_in_must_be_whole_campaign_cycles():
+    with pytest.raises(ValueError):
+        design.research_manifest(10000, 730)
+    design.research_manifest(10000, 3 * design.CAMPAIGN_CYCLE)
+
+
+def test_burnin_pilot_reuses_pilot_seeds():
+    follow_up = design.pilot_burnin_manifest()
+    pilot = design.pilot_manifest()
+    assert set(follow_up.burn_days) == {2190, 3285}
+    assert (follow_up.burn_days % design.CAMPAIGN_CYCLE == 0).all()
+    assert set(follow_up.seed) == set(pilot.seed)
+    assert len(follow_up) == 3 * 3 * 10 * 2
+    assert follow_up.run_id.is_unique and not set(follow_up.run_id) & set(pilot.run_id)
