@@ -35,6 +35,14 @@ milestone it serves. Status: 📝 planned · 🟨 in progress · ✅ done · ❌
 | I17 | **Training and tuning summaries in git**: the combined run summary goes to `results/research_train_tune/summary.csv`, with the batch record. `.gitignore` keeps `results/research*/`. Daily outputs stay outside git (D6). | D6, D11 | ✅ |
 | I11 | **Scheduled task** `malaria-pilot`: runs `run_pilot.ps1` once on Tue 17 Nov 2026 at 21:00 (wakes the PC, allowed on battery, starts late if missed, 14 h limit) | The user chose this start time | ✅ registered, next run 17 Nov 21:00 |
 
+## M3 — Locked protocol (Week 3)
+
+| ID | Improvement | Why | Status |
+|---|---|---|---|
+| I18 | **`docs/PROTOCOL.md`**: the locked study protocol and pre-registration note (estimand, λ grids, δ, methods, frozen allocation rules, decision gate, audit classification, primary and secondary endpoints, compute plan, deviation policy) | M3 gate. Written before any audit run exists (D11). | ✅ |
+| I19 | **`protocol.json`**: every frozen number in machine-readable form, so M4 code reads it rather than re-typing constants | One source of truth. A changed constant shows up as a diff against the tag. | ✅ |
+| I20 | **`tests/test_protocol.py`**: protocol.json agrees with `design.py` (EIRs, nets, seed bases). Candidate EIRs are disjoint from tune and audit EIRs and include every training EIR. Seed bases are disjoint. Block arithmetic stays within 64 runs. The compute plan stays under 100 CPU-h. | Catches inconsistencies between the protocol and the code before M4 builds on it. `design.py` gains the `direct` seed base. | ✅ 19 tests pass |
+
 **Design details settled while writing M1 code**
 - EIR partitions are interleaved on the log scale: train = 16 points at fractions i/15
   (including 5 and 50, so the audit never extrapolates), tune = 6 at (2j+1)/12, audit =

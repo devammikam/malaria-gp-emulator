@@ -27,7 +27,8 @@ EIR_MIN, EIR_MAX = 5.0, 50.0
 NETS = (0.3, 0.5, 0.7)
 HORIZON_DAYS = 1825
 SEED_BASE = {"pilot": 1_000_000, "train": 2_000_000, "tune": 3_000_000,
-             "audit": 4_000_000, "adaptive": 5_000_000}
+             "audit": 4_000_000, "adaptive": 5_000_000,
+             "direct": 6_000_000}
 MAX_CONTEXTS = 1000          # contexts per partition before seeds would collide
 MAX_REPS = 1000              # replicates per context before seeds would collide
 

@@ -6,7 +6,8 @@ Decisions are never deleted. A reversal is a new entry that points back to the o
 ---
 
 ## D1 — Primary decision check: two levels, empirical error rate is the primary metric
-*16 Nov 2026 · Status: adopted, to be confirmed by the M2 pilot*
+*16 Nov 2026 · Status: adopted; confirmed by M2 (normality). The operational check is
+refined to paired contrasts by D10/D12; marginal t-intervals remain a secondary check.*
 
 **Decision.**
 - **Primary outcome:** the audited frequency of regret above δ, together with the
@@ -96,6 +97,28 @@ follow-up.
 
 ---
 
+## D12 — Protocol locked (`protocol-v1`)
+*20 Nov 2026 · Status: adopted. Full text in [PROTOCOL.md](PROTOCOL.md), numbers in
+`protocol.json`.*
+
+Choices the dossier left open, and why:
+
+| Choice | Reason |
+|---|---|
+| D10 adopted: paired-contrast t-check is primary for the audit and for direct sampling | Shared seeds (D4) exist to make option comparisons precise. Unpaired intervals count shared seed noise twice. Justified by design, not by the pilot numbers. |
+| Adaptive unit = block of 3 runs (all options, one seed); 21 blocks = 63 runs | Keeps every option comparison paired. Fits the 64-run cap. |
+| 31 candidate EIRs at k/30, disjoint from tune and audit EIRs | Audit EIRs stay true interpolation tests. Candidates include all training EIRs, so replicate blocks are possible. |
+| Interpolator reuses the space-filling design | Isolates the model from the data. |
+| Direct sampling spends the full 255 runs at the audit EIRs with its own seeds | Equal total budget. It is the "no emulator" ranking-and-selection comparator. |
+| GP noise: pooled variance plus same-seed correlation between options | Per-configuration variance from 4 seeds is unstable. Correlation follows from D4. Same for all methods. |
+| κ calibrated on tuning contrasts and means; failure → abstain on everything | Dossier: calibration failure triggers abstention. Tuning data, never audit data. |
+| Primary endpoint: coverage gain at equal budget with risk non-inferiority (margin 0.02), paired bootstrap over 12 contexts | A single pre-declared test. It prevents winning by abstaining (dossier) or by accepting everything. |
+| Primary λ grid as dossier (21 values, 0–1); fine 0–0.30 grid secondary | Training data show choices change only for λ ≤ 0.2. Disclosed. The primary grid is not altered after seeing data. |
+| One primary repeat; repeat 2 only if CPU ≤ 75 h | Keeps within 100 CPU-h at the measured 172 s per run. The condition depends on compute only. |
+| Audit reserve classification secondary | Keeps the confidence accounting of the primary classification intact. |
+
+---
+
 ## D11 — Training and tuning runs start before the protocol is locked; audit runs after
 *20 Nov 2026 · Status: adopted*
 
@@ -113,8 +136,8 @@ purpose, and it's stated here.
 ---
 
 ## D10 — Proposal for M3: regret check on paired contrasts
-*19 Nov 2026 · Status: proposed (decided at M3). Proposed **after** seeing the pilot,
-and labelled as such.*
+*19 Nov 2026 · Status: **adopted 20 Nov 2026 at M3** (D12), before any audit data existed.
+Proposed **after** seeing the pilot, and labelled as such.*
 
 The current check, `checked_regret`, combines each option's own interval
 (worst case of the chosen option minus best case of the alternatives). This ignores that

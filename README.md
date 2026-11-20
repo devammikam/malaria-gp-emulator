@@ -14,6 +14,7 @@ bed-net coverage, and audits the bed-net coverage decisions it would make.
 
 - [docs/PLAN.md](docs/PLAN.md): the 12-week milestone plan and its current status
 - [docs/DECISIONS.md](docs/DECISIONS.md): design decisions and the reasoning behind them
+- [docs/PROTOCOL.md](docs/PROTOCOL.md): the locked study protocol (`protocol-v1`), with frozen numbers in `protocol.json`
 - [docs/IMPROVEMENTS.md](docs/IMPROVEMENTS.md): every code change, logged before it is written
 - [docs/SCHEMA.md](docs/SCHEMA.md): column definitions for manifests and run outputs
 

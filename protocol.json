@@ -1,0 +1,93 @@
+{
+  "version": "protocol-v1",
+  "locked_on": "2026-11-20",
+  "document": "docs/PROTOCOL.md",
+  "simulator": {
+    "package": "malariasimulation",
+    "version": "3.0.0",
+    "source_sha": "5f63ccd61c8e893892fd12e7580fc22a7c882285",
+    "net_scenario": "D5_campaign_v1",
+    "treatment_coverage": 0.45,
+    "population": 10000,
+    "burn_days": 3285,
+    "horizon_days": 1825,
+    "outcome": "mean_lm_prevalence_2to10"
+  },
+  "domain": {
+    "eir_min": 5.0,
+    "eir_max": 50.0,
+    "input_scale": "log",
+    "options_net_coverage": [0.3, 0.5, 0.7]
+  },
+  "partitions": {
+    "train_fractions": "i/15, i=0..15",
+    "tune_fractions": "(2j+1)/12, j=0..5",
+    "audit_fractions": "(2k+1)/24, k=0..11",
+    "candidate_fractions": "k/30, k=0..30",
+    "replicates": {"train": 4, "tune": 4, "audit": 20},
+    "research_manifest_sha256": "c1c9e82ebfc38b78db57f1b95755b73ef69c13f85288192fc5d9ac8a21bd7e9a"
+  },
+  "seeds": {
+    "rule": "base + 1000*context + rep",
+    "bases": {"pilot": 1000000, "train": 2000000, "tune": 3000000, "audit": 4000000,
+              "adaptive": 5000000, "direct": 6000000},
+    "adaptive_context": "candidate index k (0..30)",
+    "adaptive_rep": "100*(repeat-1) + (number of earlier blocks the method placed at k) + 1",
+    "direct_context": "audit index (0..11)",
+    "direct_rep": "100*(repeat-1) + replicate number at that context",
+    "bootstrap_seed": 20261130
+  },
+  "decision": {
+    "objective": "prevalence + lambda * coverage",
+    "lambda_primary": {"start": 0.0, "stop": 1.0, "count": 21},
+    "lambda_fine_secondary": {"start": 0.0, "stop": 0.30, "count": 31},
+    "delta_primary": 0.01,
+    "delta_sensitivity": [0.005, 0.02],
+    "contested_gap": 0.05
+  },
+  "budget": {
+    "initial_runs": 192,
+    "adaptive_cap_runs": 64,
+    "block_runs": 3,
+    "adaptive_blocks": 21,
+    "checkpoints_blocks": [0, 5, 10, 15, 21],
+    "direct_initial_seeds_per_config": 2,
+    "direct_total_runs": 255,
+    "repeats_primary": 1,
+    "repeat2_condition_cpu_hours_max": 75.0
+  },
+  "emulator": {
+    "kernel": "matern52_ard",
+    "inputs": ["log_eir", "net"],
+    "mean": "constant",
+    "hyperparameters": "maximum marginal likelihood, L-BFGS-B, log-length bounds [-3, 3], log-amplitude bounds [-5, 1]",
+    "noise": "pooled within-configuration variance / n, with pooled same-seed correlation rho between options at one EIR",
+    "screen_z_primary": 1.96,
+    "screen_z_curve": [0.0, 0.5, 1.0, 1.5, 1.96, 2.5, 3.0],
+    "kappa_grid": [1.0, 1.5, 2.0, 3.0, 5.0],
+    "kappa_rule": "smallest kappa with at least 16 of 18 tune marginal means and 16 of 18 tune contrasts inside the 95% interval; none -> abstain on all decisions",
+    "space_filling_every": 4
+  },
+  "checks": {
+    "primary": "paired_contrast_t",
+    "alpha": 0.05,
+    "bonferroni_family": "contexts x 3 option pairs, two-sided",
+    "secondary": ["marginal_t", "hoeffding_union_bound"],
+    "audit_reserve_runs": 180,
+    "audit_reserve_rule": "at most 3 audit contexts with the most unresolved primary decisions, 20 extra seeds each; stage-1 classification stays primary"
+  },
+  "endpoint": {
+    "primary": "coverage difference (decision-focused minus space-filling GP) at 255 runs, delta 0.01, z 1.96, primary lambda grid, with risk non-inferiority",
+    "risk_margin": 0.02,
+    "bootstrap": "paired, over the 12 audit contexts, 10000 resamples"
+  },
+  "compute_plan_cpu_hours": {
+    "seconds_per_run_measured": 172.4,
+    "train_tune_done": 12.6,
+    "audit": 34.5,
+    "gp_adaptive": 9.1,
+    "direct_sampling": 12.2,
+    "audit_reserve": 8.6,
+    "ceiling": 100.0
+  }
+}
