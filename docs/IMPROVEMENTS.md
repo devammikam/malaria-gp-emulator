@@ -32,6 +32,7 @@ milestone it serves. Status: 📝 planned · 🟨 in progress · ✅ done · ❌
 | I14 | **`pilot_analysis.py`**: works for any pilot folder (`--runs`, `--out`), reads wall time from `DONE.txt`, and reports mean as well as max SD per population | Same rules applied to the follow-up. Max-of-9 SD with 10 seeds is noisy. | ✅ |
 | I15 | **Lock burn-in 3285 days**: `design.py` research default `--burn 3285`. Follow-up results committed in `results/pilot_burnin/`. | D9 outcome | ✅ |
 | I16 | **`design.py research --partitions train,tune`**: writes a subset manifest from the same rows and seeds as the full research manifest. The full manifest is written too, so its hash fixes the whole plan. Test: subset rows are identical to the matching full-manifest rows. | D11: start training and tuning runs early | ✅ 12 tests pass |
+| I17 | **Training and tuning summaries in git**: the combined run summary goes to `results/research_train_tune/summary.csv`, with the batch record. `.gitignore` keeps `results/research*/`. Daily outputs stay outside git (D6). | D6, D11 | ✅ |
 | I11 | **Scheduled task** `malaria-pilot`: runs `run_pilot.ps1` once on Tue 17 Nov 2026 at 21:00 (wakes the PC, allowed on battery, starts late if missed, 14 h limit) | The user chose this start time | ✅ registered, next run 17 Nov 21:00 |
 
 **Design details settled while writing M1 code**

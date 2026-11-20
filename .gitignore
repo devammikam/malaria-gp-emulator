@@ -16,6 +16,7 @@ R_install_session.txt
 # Personal runs (the reference run in results/ is kept)
 results/*/
 !results/pilot*/
+!results/research*/
 
 # Native simulator outputs (archived separately, see docs/DECISIONS.md D6)
 runs/
