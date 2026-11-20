@@ -1,0 +1,19 @@
+{
+  "manifest": "research_p10000_b3285.csv",
+  "runs": 984,
+  "sha256": "c1c9e82ebfc38b78db57f1b95755b73ef69c13f85288192fc5d9ac8a21bd7e9a",
+  "estimated_cpu_hours": 88.9,
+  "runs_by_partition": {
+    "audit": 720,
+    "train": 192,
+    "tune": 72
+  },
+  "seed_plan": "seed = base[partition] + 1000*context + rep; shared across net options (D4)",
+  "bases": {
+    "pilot": 1000000,
+    "train": 2000000,
+    "tune": 3000000,
+    "audit": 4000000,
+    "adaptive": 5000000
+  }
+}

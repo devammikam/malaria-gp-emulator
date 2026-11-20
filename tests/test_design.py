@@ -86,3 +86,13 @@ def test_burnin_pilot_reuses_pilot_seeds():
     assert set(follow_up.seed) == set(pilot.seed)
     assert len(follow_up) == 3 * 3 * 10 * 2
     assert follow_up.run_id.is_unique and not set(follow_up.run_id) & set(pilot.run_id)
+
+
+def test_partition_subset_keeps_rows_and_seeds(research):
+    subset = design.partition_subset(research, ["train", "tune"])
+    assert set(subset.partition) == {"train", "tune"}
+    assert len(subset) == (16 + 6) * 3 * 4
+    full = research[research.partition.isin(["train", "tune"])].reset_index(drop=True)
+    pd.testing.assert_frame_equal(subset, full)
+    with pytest.raises(ValueError):
+        design.partition_subset(research, ["audits"])

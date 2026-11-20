@@ -112,6 +112,13 @@ def research_manifest(population, burn, reps=None):
     return pd.DataFrame(rows)
 
 
+def partition_subset(manifest, partitions):
+    unknown = set(partitions) - set(manifest.partition)
+    if unknown:
+        raise ValueError(f"Unknown partitions: {sorted(unknown)}")
+    return manifest[manifest.partition.isin(partitions)].reset_index(drop=True)
+
+
 def estimated_cpu_hours(manifest):
     person_days = manifest.population * (manifest.burn_days + manifest.horizon_days)
     return float((person_days * SECONDS_PER_PERSON_DAY).sum() / 3600)
@@ -140,6 +147,8 @@ def main():
     parser.add_argument("--population", type=int, default=10000)
     parser.add_argument("--burn", type=int, default=3285)
     parser.add_argument("--reps", type=int, default=10, help="pilot replicates")
+    parser.add_argument("--partitions", default=None,
+                        help="research only: also write a subset, e.g. train,tune (D11)")
     args = parser.parse_args()
     if args.kind == "pilot":
         info = write(pilot_manifest(args.reps), args.out, "pilot")
@@ -147,8 +156,14 @@ def main():
         info = write(pilot_burnin_manifest(args.population, reps=args.reps), args.out,
                      "pilot_burnin")
     else:
-        info = write(research_manifest(args.population, args.burn), args.out,
-                     f"research_p{args.population}_b{args.burn}")
+        name = f"research_p{args.population}_b{args.burn}"
+        full = research_manifest(args.population, args.burn)
+        info = write(full, args.out, name)
+        if args.partitions:
+            keep = args.partitions.split(",")
+            info = {"full": info,
+                    "subset": write(partition_subset(full, keep), args.out,
+                                    f"{name}_{'_'.join(keep)}")}
     print(json.dumps(info, indent=2))
 
 

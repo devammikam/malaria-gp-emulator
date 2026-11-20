@@ -96,6 +96,22 @@ follow-up.
 
 ---
 
+## D11 — Training and tuning runs start before the protocol is locked; audit runs after
+*20 Nov 2026 · Status: adopted*
+
+**Why.** The training and tuning design (16 + 6 EIR settings × 3 nets × 4 seeds = 264
+runs at population 10,000, burn-in 3285) is fixed by `design.py` and its tests. Nothing
+in M3 changes it. Running it now (~9 CPU-h, ~1.5–2 h on 6 shards) takes compute off the
+critical path in M5.
+
+**Safeguard.** Audit runs (720) are not generated until `protocol-v1` is tagged (M3), so
+no audit result can influence the protocol, D10 or δ. The full research manifest and its
+sha256 are committed now, so the audit seeds are fixed in advance and can't be chosen
+after the fact. Training and tuning data may inform M3's GP settings. That's their
+purpose, and it's stated here.
+
+---
+
 ## D10 — Proposal for M3: regret check on paired contrasts
 *19 Nov 2026 · Status: proposed (decided at M3). Proposed **after** seeing the pilot,
 and labelled as such.*
